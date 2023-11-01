@@ -1,6 +1,6 @@
 def productEntity(item) -> dict:
     return {
-        "id": item["id"],
+        "id": str(item["_id"]),
         "name": item["name"],
         "description": item["description"],
         "price": item["price"],

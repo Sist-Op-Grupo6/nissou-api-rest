@@ -4,12 +4,12 @@ from starlette.responses import RedirectResponse
 
 app = FastAPI(
     title="Nissou API",
-    description="Simple API made with FastAPI with MongoDB",
+    description="Simple API made with FastAPI and MongoDB",
     version="1.0.0"
 )
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 def index():
-    return RedirectResponse(url="/docs")
+    RedirectResponse(url="/docs")
 
 app.include_router(product)
