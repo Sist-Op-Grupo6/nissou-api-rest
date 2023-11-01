@@ -2,8 +2,6 @@
 
 Hecho en python
 
-pip install fastapi
-pip install uvicorn
-pip install pymongo
+pip install fastapi uvicorn pymongo
 
-para correr el servidor => uvicorn app:app --reload
+Para correr el servidor ===> uvicorn app:app --reload
