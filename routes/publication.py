@@ -20,7 +20,8 @@ def create_publication(publication: Publication):
     
     user = conn.NissouDB.users.find_one({"_id": ObjectId(publication.author)})
     publication.author = user
-
+    product = conn.NissouDB.products.find_one({"_id": ObjectId(publication.product)})
+    publication.product = product
     new_pub = dict(publication)
 
     id = conn.NissouDB.publications.insert_one(new_pub).inserted_id
