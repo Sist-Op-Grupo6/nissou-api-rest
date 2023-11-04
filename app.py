@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from routes.product import product
 from routes.user import user
-from routes.publication import publication
+from routes.comments import comments
 from starlette.responses import RedirectResponse
+from routes.publication import publication
 
 app = FastAPI(
     title="Nissou API",
@@ -15,5 +16,6 @@ def index():
     RedirectResponse(url="/docs")
 
 app.include_router(product)
-app.include_router(publication)
 app.include_router(user)
+app.include_router(comments)
+app.include_router(publication)
