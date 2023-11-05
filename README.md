@@ -2,8 +2,10 @@
 
 Hecho en python
 
-pip install fastapi uvicorn pymongo
+para crear el contenedor solo ejecuten:
 
-Para correr el servidor ===> uvicorn app:app --reload
+``` bash
+docker-compose up
+```
 
-
+Se deberia crear el contenedor y acceden desde el localhost:8000/docs a la documentacion
