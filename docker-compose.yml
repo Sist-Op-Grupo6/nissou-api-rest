@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  webapp:
+    container_name: container_nissou_webapp
+    restart: always
+    build: .
+    ports:
+      - "8000:8000"
+    links:
+      - database
+    volumes:
+      - ./:/app
+
+  database:
+    container_name: container_nissou_db
+    image: mongo:latest
+    ports:
+      - "27018:27017"
