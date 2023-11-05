@@ -17,6 +17,11 @@ def find_user_by_id(id: str):
     return userEntity(conn.NissouDB.users.find_one({"_id": ObjectId(id)}))
 
 
+@user.get("/users/{email}/{password}", response_model=User, tags=["Users"])
+def find_user_by_email_password(email: str, password: str):
+    return userEntity(conn.NissouDB.users.find_one({"email": email, "password": password}))
+
+
 @user.post("/users", response_model=User, tags=["Users"])
 def create_user(user: User):
     new_user = dict(user)
