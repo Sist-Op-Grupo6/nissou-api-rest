@@ -6,6 +6,7 @@ from schemas.user import userEntity
 from schemas.product import productEntity
 
 class PublicationDB(BaseModel):
+    id: str
     author: User
     date: str
     product: Product
