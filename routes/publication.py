@@ -4,7 +4,6 @@ from schemas.publication import publicationEntity, publicationListEntity,Publica
 from models.publication import Publication
 from bson import ObjectId
 from starlette.status import HTTP_204_NO_CONTENT
-from models.comments import Comments
 
 publication = APIRouter()
 
@@ -21,8 +20,7 @@ def create_publication(publication: Publication):
     
     user = conn.NissouDB.users.find_one({"_id": ObjectId(publication.author)})
     publication.author = user
-    product = conn.NissouDB.products.find_one({"_id": ObjectId(publication.product)})
-    publication.product = product
+
     new_pub = dict(publication)
 
     id = conn.NissouDB.publications.insert_one(new_pub).inserted_id
@@ -37,18 +35,6 @@ def create_publication(publication: Publication):
 #    )
 #
 #    return publicationEntity(conn.NissouDB.publications.find_one({"_id": ObjectId(id)}))
-
-@publication.put("/publications/{id}", response_model=PublicationDB, tags=["Publications"])
-def add_commentOnPublication(id: str, comment: Comments):
-#    publication = publicationEntity(conn.NissouDB.publications.find_one({"_id": ObjectId(id)}))
-    new_com=dict(comment)
-#    publication["comments"].append(new_com)
-   # return publication
-
-    #conn.NissouDB.publications.find_one_and_update({"_id": ObjectId(id)}, {"$set": dict(publication)})
-    conn.NissouDB.publications.update_one({"_id": ObjectId(id)}, {"$push": {"comments": new_com}})
-    return publicationEntity(conn.NissouDB.publications.find_one({"_id": ObjectId(id)}))
-
 
 @publication.delete("/publications/{id}", status_code=status.HTTP_204_NO_CONTENT, tags=["Publications"])
 def delete_publication(id: str):

@@ -4,5 +4,5 @@ from pydantic import BaseModel
 
 class Comments(BaseModel):
     authorName: str
-    date: str  # Use datetime.date
+    date: date  # Use datetime.date
     commentText: str
