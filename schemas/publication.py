@@ -3,6 +3,7 @@ from models.user import User
 from schemas.user import userEntity
 
 class PublicationDB(BaseModel):
+    id: str
     author: User
     date: str
 
