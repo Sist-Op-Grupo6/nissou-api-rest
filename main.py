@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.responses import RedirectResponse
+
 from routes.product import product
 from routes.user import user
-from routes.comments import comments
+from routes.comment import comment
 from routes.order import orders
-from starlette.responses import RedirectResponse
 from routes.publication import publication
 
 app = FastAPI(
@@ -28,6 +29,6 @@ def index():
 
 app.include_router(product)
 app.include_router(user)
-app.include_router(comments)
+app.include_router(comment)
 app.include_router(publication)
 app.include_router(orders)

@@ -1,11 +1,16 @@
 from pydantic import BaseModel
-from models.comments import Comments
+from models.user import User
+from models.product import Product
+from models.comment import Comment
 from typing import Optional
 
+
 class Publication(BaseModel):
-    author: str
+    id: str
+    author: User
     date: str
-    product: str
-    publicationTXT: str
+    product: Product
+    title: str
+    description: str
     likes: int
-    comments: Optional[list[Comments]]
+    comments: Optional[list[Comment]]

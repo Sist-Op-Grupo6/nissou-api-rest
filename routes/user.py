@@ -35,6 +35,13 @@ def update_user(id: str, user: User):
     conn.NissouDB.users.find_one_and_update(
         {"_id": ObjectId(id)}, {"$set": dict(user)}
     )
+
+   ## Actualiza el nombre del usuario en todas las publicaciones
+   #conn.NissouDB.publications.update_many(
+   #    {"author._id": ObjectId(user_id)},
+   #    {"$set": {"author.name": new_name}}
+   #)
+
     return userEntity(conn.NissouDB.users.find_one({"_id": ObjectId(id)}))
 
 

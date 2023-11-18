@@ -1,9 +1,11 @@
 from typing import Optional
 from datetime import date
 from pydantic import BaseModel
+from models.user import User
 
-class Comments(BaseModel):
+
+class Comment(BaseModel):
     id: str
-    authorName: str
+    author: User
     date: str  # Use datetime.date
-    commentText: str
+    text: str

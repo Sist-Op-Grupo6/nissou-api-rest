@@ -9,3 +9,4 @@ class Product(BaseModel):
     image: Optional[str]
     weight: float
     material: str
+    quantity: int
