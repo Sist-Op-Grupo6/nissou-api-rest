@@ -18,6 +18,7 @@ def find_comment_by_id(id: str):
 @orders.post("/orders", response_model=Order, tags=["Orders"])
 def create_comment(orders: Order):
     new_order = dict(orders)
+    del new_order["id"]
     id = conn.NissouDB.orders.insert_one(new_order).inserted_id
     orders = conn.NissouDB.orders.find_one({"_id": id})
     return orderEntity(orders)
