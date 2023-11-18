@@ -1,34 +1,41 @@
 from fastapi import APIRouter, Response, status
 from config.db import conn
-from schemas.publication import publicationEntity, publicationListEntity, PublicationDB
+from schemas.publication import publicationEntity, publicationListEntity
 from models.publication import Publication
 from bson import ObjectId
 from starlette.status import HTTP_204_NO_CONTENT
-from models.comments import Comments
+from models.comment import Comment
 
 publication = APIRouter()
 
 
 @publication.get(
-    "/publications", response_model=list[PublicationDB], tags=["Publications"]
+    "/publications", response_model=list[Publication], tags=["Publications"]
 )
 def find_all_publications():
     return publicationListEntity(conn.NissouDB.publications.find())
 
 
 @publication.get(
-    "/publications/{id}", response_model=PublicationDB, tags=["Publications"]
+    "/publications/{id}", response_model=Publication, tags=["Publications"]
 )
 def find_publication_by_id(id: str):
     return publicationEntity(conn.NissouDB.publications.find_one({"_id": ObjectId(id)}))
 
+@publication.get("/publications/user/{user_id}", response_model=list[Publication], tags=["Publications"])
+def find_publications_by_user(user_id: str):
+    user_publications = conn.NissouDB.publications.find({"author._id": ObjectId(user_id)})
+    return publicationListEntity(user_publications)
 
-@publication.post("/publications", response_model=PublicationDB, tags=["Publications"])
-def create_publication(publication: Publication):
-    user = conn.NissouDB.users.find_one({"_id": ObjectId(publication.author)})
+
+@publication.post("/publications", response_model=Publication, tags=["Publications"])
+def create_publication(userId: str, productId: str, publication: Publication):
+    user = conn.NissouDB.users.find_one({"_id": ObjectId(userId)})
     publication.author = user
-    product = conn.NissouDB.products.find_one({"_id": ObjectId(publication.product)})
+
+    product = conn.NissouDB.products.find_one({"_id": ObjectId(productId)})
     publication.product = product
+    
     new_pub = dict(publication)
 
     id = conn.NissouDB.publications.insert_one(new_pub).inserted_id
@@ -37,14 +44,32 @@ def create_publication(publication: Publication):
     return publicationEntity(publication)
 
 @publication.post(
-    "/publications/{id}", response_model=PublicationDB, tags=["Publications"]
+    "/publications/{id}/comments", response_model=Publication, tags=["Publications"]
 )
-def add_comment_on_publication(id: str, comment: Comments):
-    new_com = dict(comment)
+def add_comment_on_publication(id: str, commentId: str):
+    publication = conn.NissouDB.publications.find_one({"_id": ObjectId(id)})
+    comment = conn.NissouDB.comments.find_one({"_id": ObjectId(commentId)})
+    if publication and comment:
+        publication["comments"].append(comment)
+        conn.NissouDB.publications.update_one(
+            {"_id": ObjectId(id)}, {"$set": publication}
+        )
+        return publicationEntity(publication)
+
+    return Response(
+        status_code=status.HTTP_404_NOT_FOUND, content="Publication not found"
+    )
+
+
+@publication.put(
+    "/publications/{id}", response_model=Publication, tags=["Publications"]
+)
+def update_publication(id: str, new_title: str, new_description: str):
     conn.NissouDB.publications.update_one(
-        {"_id": ObjectId(id)}, {"$push": {"comments": new_com}}
+        {"_id": ObjectId(id)}, {"$set": {"title": new_title}}
     )
     return publicationEntity(conn.NissouDB.publications.find_one({"_id": ObjectId(id)}))
+
 
 @publication.delete(
     "/publications/{id}", status_code=status.HTTP_204_NO_CONTENT, tags=["Publications"]
