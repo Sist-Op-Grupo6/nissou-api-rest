@@ -27,3 +27,4 @@ def publicationEntity(item)->dict:
 
 def publicationListEntity(entity) -> list:
     return [publicationEntity(item) for item in entity]
+
