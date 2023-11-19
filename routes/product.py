@@ -21,10 +21,12 @@ def find_product_by_id(id: str):
 @product.post("/products", response_model=Product, tags=["Products"])
 def create_product(product: Product):
     new_product = dict(product)
+    del new_product["id"]
+
     id = conn.NissouDB.products.insert_one(new_product).inserted_id
     product = conn.NissouDB.products.find_one({"_id": id})
-    return productEntity(product)
 
+    return productEntity(product)
 
 @product.put("/products/{id}", response_model=Product, tags=["Products"])
 def update_product(id: str, product: Product):

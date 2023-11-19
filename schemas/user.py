@@ -12,3 +12,4 @@ def userEntity(item) -> dict:
 
 def userListEntity(entity) -> list:
     return [userEntity(item) for item in entity]
+
