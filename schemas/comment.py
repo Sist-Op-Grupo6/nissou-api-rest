@@ -5,6 +5,7 @@ def commentEntity(item) -> dict:
     return {
         "id": str(item["_id"]),
         "author": userEntity(item["author"]),
+        "publicationId": str(item["publicationId"]),
         "date": item["date"],
         "text": item["text"],
     }

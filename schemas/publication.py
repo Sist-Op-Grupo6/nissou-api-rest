@@ -10,7 +10,6 @@ def publicationEntity(item) -> dict:
         "title": item["title"],
         "description": item["description"],
         "likes": item["likes"],
-        "comments": item["comments"],
     }
     
 def publicationListEntity(entity) -> list:

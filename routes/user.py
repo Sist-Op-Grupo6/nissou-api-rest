@@ -16,11 +16,9 @@ def find_all_users():
 def find_user_by_id(id: str):
     return userEntity(conn.NissouDB.users.find_one({"_id": ObjectId(id)}))
 
-
 @user.get("/users/{email}/{password}", response_model=User, tags=["Users"])
 def find_user_by_email_password(email: str, password: str):
     return userEntity(conn.NissouDB.users.find_one({"email": email, "password": password}))
-
 
 @user.post("/users", response_model=User, tags=["Users"])
 def create_user(user: User):
@@ -28,7 +26,6 @@ def create_user(user: User):
     id = conn.NissouDB.users.insert_one(new_user).inserted_id
     user = conn.NissouDB.users.find_one({"_id": id})
     return userEntity(user)
-
 
 @user.put("/users/{id}", response_model=User, tags=["Users"])
 def update_user(id: str, user: User):
@@ -49,7 +46,6 @@ def update_user(id: str, user: User):
     )
 
     return userEntity(conn.NissouDB.users.find_one({"_id": ObjectId(id)}))
-
 
 @user.delete(
     "/users/{id}", status_code=status.HTTP_204_NO_CONTENT, tags=["Users"]

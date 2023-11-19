@@ -4,7 +4,6 @@ from schemas.publication import publicationEntity, publicationListEntity
 from models.publication import Publication
 from bson import ObjectId
 from starlette.status import HTTP_204_NO_CONTENT
-from models.comment import Comment
 
 publication = APIRouter()
 
@@ -42,23 +41,6 @@ def create_publication(userId: str, productId: str, publication: Publication):
     publication = conn.NissouDB.publications.find_one({"_id": id})
 
     return publicationEntity(publication)
-
-@publication.post(
-    "/publications/{id}/comments", response_model=Publication, tags=["Publications"]
-)
-def add_comment_on_publication(id: str, commentId: str):
-    publication = conn.NissouDB.publications.find_one({"_id": ObjectId(id)})
-    comment = conn.NissouDB.comments.find_one({"_id": ObjectId(commentId)})
-    if publication and comment:
-        publication["comments"].append(comment)
-        conn.NissouDB.publications.update_one(
-            {"_id": ObjectId(id)}, {"$set": publication}
-        )
-        return publicationEntity(publication)
-
-    return Response(
-        status_code=status.HTTP_404_NOT_FOUND, content="Publication not found"
-    )
 
 
 @publication.put(
